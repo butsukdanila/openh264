@@ -34,7 +34,7 @@ GTEST_VER=release-1.8.1
 CCASFLAGS=$(CFLAGS)
 STATIC_LDFLAGS=-lstdc++
 STRIP ?= strip
-USE_STACK_PROTECTOR = Yes
+USE_STACK_PROTECTOR=No
 USE_LOW_VERSION_NDK=No
 USE_ANT=No
 
@@ -57,7 +57,7 @@ endif
 ifeq ($(BUILDTYPE), Release)
 CFLAGS += $(CFLAGS_OPT)
 CFLAGS += -DNDEBUG
-USE_ASM = Yes
+USE_ASM = No
 ifeq ($(DEBUGSYMBOLS), True)
 CFLAGS += -g
 CXXFLAGS += -g
@@ -80,7 +80,7 @@ STRIP_FLAGS := -g
 endif
 
 # Make sure the all target is the first one
-all: libraries binaries
+all: libraries
 
 ifeq (android, $(OS))
 USE_LOW_VERSION_NDK = $(shell $(SRC_PATH)build/ndk-version-check.sh $(NDKROOT))
@@ -222,22 +222,22 @@ ifeq ($(HAVE_GMP_API),Yes)
 include $(SRC_PATH)module/targets.mk
 endif
 
-ifneq (android, $(OS))
-ifneq (ios, $(OS))
-ifneq (msvc-wp, $(OS))
-include $(SRC_PATH)codec/console/dec/targets.mk
-include $(SRC_PATH)codec/console/enc/targets.mk
-include $(SRC_PATH)codec/console/common/targets.mk
-endif
-endif
-endif
+# ifneq (android, $(OS))
+# ifneq (ios, $(OS))
+# ifneq (msvc-wp, $(OS))
+# include $(SRC_PATH)codec/console/dec/targets.mk
+# include $(SRC_PATH)codec/console/enc/targets.mk
+# include $(SRC_PATH)codec/console/common/targets.mk
+# endif
+# endif
+# endif
 
 libraries: $(LIBPREFIX)$(PROJECT_NAME).$(LIBSUFFIX)
 
 # No point in building dylib for ios
-ifneq (ios, $(OS))
-libraries: $(LIBPREFIX)$(PROJECT_NAME).$(SHAREDLIBSUFFIX)
-endif
+# ifneq (ios, $(OS))
+# libraries: $(LIBPREFIX)$(PROJECT_NAME).$(SHAREDLIBSUFFIX)
+# endif
 
 LIBRARIES += $(LIBPREFIX)$(PROJECT_NAME).$(LIBSUFFIX) $(LIBPREFIX)$(PROJECT_NAME).$(SHAREDLIBSUFFIXFULLVER)
 
